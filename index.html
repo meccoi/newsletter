@@ -65,7 +65,10 @@
             <div class="flex flex-col space-y-5 text-center">
                 <h1 class="text-6xl font-extrabold">Join Our <span class="gradient-text">Newsletter</span></h1>
                 <p class="text-gray-300 text-lg">We are going to send you a project challenge every week</p>
-                <input class="shadow-sm text-lg px-5 py-3 border border-gray-800 focus:outline-none rounded-md text-center bg-gray-900" type="text" placeholder="email@gmail.com">
+                <form id="newsletter-form">
+                    <input name="email" class="shadow-sm text-lg px-5 py-3 border border-gray-800 focus:outline-none rounded-md text-center bg-gray-900" type="text" placeholder="email@gmail.com">
+                    <button class="shadow-sm text-lg px-5 py-3 border  focus:outline-none rounded-md">></button>
+                </form>
                 <span class="text-sm text-gray-300">Join 100+ 🧑🏻‍💻 Reading Our Newsletter</span>
             </div>
         </div>
@@ -92,3 +95,34 @@
     </script>
 </body>
 </html>
+
+
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+const supabaseUrl = 'https://latvpxaukzytgsgctrrr.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxhdHZweGF1a3p5dGdzZ2N0cnJyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjA5NTUzNDMsImV4cCI6MjAzNjUzMTM0M30.7wWs6aIaLThkojZwqnjqH3kRr0cQ4ktJ6cMSwVqXPug';
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+const form = document.getElementById('newsletter-form');
+
+form.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+
+    const formdata = new FormData(form);
+    const email  = formdata.get('email');
+
+    const { data, error} = await supabase
+    .from('emails')
+    .insert({email})
+
+    if(error){
+        alert("error submitting form");
+    }else{
+        alert("Email submission successfully! ");
+        form.reset();
+    }
+
+
+})
+</script>
